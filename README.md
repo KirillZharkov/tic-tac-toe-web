@@ -29,10 +29,10 @@
 
 ## Инструкция по установке и запуску игры
 
-1. Перейти по ссылке https://KirillZharkov.github.io/tic-tac-toe-web/
+1. Перейти по ссылке https://kirillzharkov.github.io/tic-tac-toe-web/
 2. Приступить к игре
 
 ## Ссылки
 
 - [GitHub репозиторий](https://github.com/KirillZharkov/tic-tac-toe-web)
-- [GitHub Pages](https://KirillZharkov.github.io/tic-tac-toe-web/)
+- [GitHub Pages](https://kirillzharkov.github.io/tic-tac-toe-web/)
