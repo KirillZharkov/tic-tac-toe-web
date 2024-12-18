@@ -22,13 +22,8 @@
         onclick="location.reload();"
       />
     </p>
-
-    <div id="game-controls">
-      <button id="save-game">Save Game</button>
-      <button id="list-games">List Games</button>
-      <input id="game-id-input" type="number" placeholder="Enter Game ID" />
-      <button id="load-game">Load Game</button>
-    </div>
+    <button onclick="showGameList()">Список игр</button>
+    <ul id="gameList"></ul>
   </body>
 </html>
 <script src="js/View.js" type="module"></script>

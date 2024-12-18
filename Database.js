@@ -1,11 +1,11 @@
+// Модуль работы с IndexedDB (Database.js)
 import { openDB } from "idb";
 
 const DB_NAME = "TicTacToeDB";
-const DB_VERSION = 1;
-const STORE_NAME = "games";
+const STORE_NAME = "Games";
 
-const initDB = async () => {
-  return openDB(DB_NAME, DB_VERSION, {
+export async function initDB() {
+  const db = await openDB(DB_NAME, 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, {
@@ -15,19 +15,20 @@ const initDB = async () => {
       }
     },
   });
-};
+  return db;
+}
 
-export const saveGame = async (gameData) => {
+export async function saveGame(gameData) {
   const db = await initDB();
   await db.add(STORE_NAME, gameData);
-};
+}
 
-export const getAllGames = async () => {
+export async function getAllGames() {
   const db = await initDB();
   return await db.getAll(STORE_NAME);
-};
+}
 
-export const getGameById = async (id) => {
+export async function getGameById(id) {
   const db = await initDB();
   return await db.get(STORE_NAME, id);
-};
+}
