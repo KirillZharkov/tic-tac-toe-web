@@ -1,66 +1,108 @@
-* {margin: 0; padding: 0;}
-
-body{
-    background-color: rgb(184, 150, 0);
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.content{
-    display: flex;
-    margin: 100px 50px 50px 50px;
-    font-family: sans-serif;
+body {
+  background-color: rgb(184, 150, 0);
 }
 
-#area{
-    width: 156px;
-    border: 1px solid #000000;
-    margin: 0 auto;
-    font-size: 0;
+.content {
+  display: flex;
+  margin: 100px 50px 50px 50px;
+  font-family: sans-serif;
 }
 
-.cell{
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    display: inline-block;
-    font-size: 26px;
-    border: 1px solid #000000;
-    cursor: pointer;
-    vertical-align: middle;
-    transition: background .1s;
+#area {
+  width: 156px;
+  border: 1px solid #000000;
+  margin: 0 auto;
+  font-size: 0;
 }
 
-.cell:hover{
-    background-color: #ffffff;
+.cell {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  display: inline-block;
+  font-size: 26px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background 0.1s;
 }
 
-#win{
-    font-size: 27px;
-    font-family: sans-serif;
-    text-align: center;
-    font-weight: bold;
+.cell:hover {
+  background-color: #ffffff;
 }
 
-#reset{
-    height: 50px;
-    width: 95px;
-    font-size: 19px;
-    margin-top: 35px;
-    background-color: lightgoldenrodyellow;
+#win {
+  font-size: 27px;
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
 }
 
-#reset:hover{
-    background-color: lightgreen;
+#reset {
+  height: 50px;
+  width: 95px;
+  font-size: 19px;
+  margin-top: 35px;
+  background-color: lightgoldenrodyellow;
 }
 
-#reset_p{
-    text-align: center;
+#reset:hover {
+  background-color: lightgreen;
 }
 
-#name{
-    text-align: center;
-    font-weight: bold;
-    font-size: 27px;
-    font-family: sans-serif;
-    margin-top: 35px;
+#reset_p {
+  text-align: center;
+}
+
+#name {
+  text-align: center;
+  font-weight: bold;
+  font-size: 27px;
+  font-family: sans-serif;
+  margin-top: 35px;
+}
+/* Добавьте стили для кнопок управления базой данных */
+#db-controls {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#db-controls button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: lightblue;
+  border: none;
+  cursor: pointer;
+}
+
+#db-controls button:hover {
+  background-color: lightgreen;
+}
+
+/* Стили для списка партий */
+#game-list {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#game-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#game-list li {
+  margin: 5px 0;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#game-list li:hover {
+  text-decoration: underline;
 }

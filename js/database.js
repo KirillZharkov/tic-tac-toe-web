@@ -1,28 +1,39 @@
-// js/database.js
 import { openDB } from "idb";
 
-const DB_NAME = "gameDatabase";
+const DB_NAME = "ticTacToeDB";
 const STORE_NAME = "games";
 
-export async function initDB() {
+async function initDB() {
   const db = await openDB(DB_NAME, 1, {
     upgrade(db) {
-      db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
     },
   });
+  return db;
 }
 
-export async function saveGame(data) {
-  const db = await openDB(DB_NAME, 1);
-  await db.add(STORE_NAME, data);
+export async function saveGame(gameData) {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  const store = tx.objectStore(STORE_NAME);
+  await store.add(gameData);
 }
 
 export async function getAllGames() {
-  const db = await openDB(DB_NAME, 1);
-  return await db.getAll(STORE_NAME);
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  return await store.getAll();
 }
 
 export async function getGameById(id) {
-  const db = await openDB(DB_NAME, 1);
-  return await db.get(STORE_NAME, id);
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  return await store.get(id);
 }

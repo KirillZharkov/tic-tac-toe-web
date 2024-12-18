@@ -1,13 +1,11 @@
 import { game } from "./Controller.js";
-import { initDB, saveGame, getAllGames } from "js/database.js";
+import { saveGame } from "./Database.js";
 
 export var winIn = [];
-export let name = prompt("Введите свое имя");
-export let size = prompt("Введите размер доски (от 3 до 10)");
+export let name = prompt("Введите свое имя") || "Guest";
+export let size = prompt("Введите размер доски (от 3 до 10)") || 3;
 
-export async function start_game() {
-  await initDB();
-
+export function start_game() {
   if (size === null || size === "") {
     size = 3;
   }
@@ -24,14 +22,6 @@ export async function start_game() {
       increment++;
     }
   }
-
-  // Здесь можно добавить код для сохранения игры
-  const gameData = {
-    name: name,
-    size: size,
-    board: winIn,
-  };
-  await saveGame(gameData);
 
   increment = 0;
   var increment2 = 0;
@@ -70,11 +60,17 @@ export async function start_game() {
       increment = increment + parseInt(size) - 1;
     }
   }
-}
-// Функция для получения всех сыгранных партий
-export async function loadGames() {
-  const games = await getAllGames();
-  console.log(games); // Выводим в консоль для проверки
+
+  game();
 }
 
-game();
+export function saveCurrentGame(coor_pc, coor_pl, size, name) {
+  const gameData = {
+    coor_pc,
+    coor_pl,
+    size,
+    name,
+    date: new Date().toISOString(),
+  };
+  saveGame(gameData);
+}
