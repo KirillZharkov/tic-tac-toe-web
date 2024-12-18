@@ -22,6 +22,19 @@ export const saveCurrentGame = (coor_pl, coor_pc, result) => {
   saveGame(gameData);
 };
 
+export const saveGame = async (gameData) => {
+  const db = await dbPromise;
+  try {
+    const tx = db.transaction("games", "readwrite");
+    const store = tx.objectStore("games");
+    await store.add(gameData);
+    await tx.done;
+    console.log("Игра успешно сохранена.");
+  } catch (err) {
+    console.error("Ошибка сохранения игры:", err);
+  }
+};
+
 export const displayGameList = async () => {
   const games = await listGames();
   const listElement = document.getElementById("game-list");
@@ -46,6 +59,49 @@ export const loadGameState = (gameData) => {
   gameData.pcMoves.forEach(
     (id) => (document.getElementById(id).innerHTML = "o")
   );
+};
+
+export const loadGame = async (id) => {
+  const db = await dbPromise;
+  try {
+    const tx = db.transaction("games", "readonly");
+    const store = tx.objectStore("games");
+    const game = await store.get(id);
+    console.log("Загруженная игра:", game);
+    return game;
+  } catch (err) {
+    console.error("Ошибка загрузки игры по ID:", err);
+    return null;
+  }
+};
+const displayGameList = async () => {
+  const games = await listGames();
+  const listElement = document.getElementById("game-list");
+  if (listElement) {
+    listElement.innerHTML = "";
+    games.forEach((game) => {
+      const item = document.createElement("li");
+      item.textContent = `Игра ${game.id}: ${game.playerName} (${game.result})`;
+      item.addEventListener("click", () => {
+        loadGame(game.id).then((gameData) => loadGameState(gameData));
+      });
+      listElement.appendChild(item);
+    });
+  }
+};
+
+export const listGames = async () => {
+  const db = await dbPromise;
+  try {
+    const tx = db.transaction("games", "readonly");
+    const store = tx.objectStore("games");
+    const games = await store.getAll();
+    console.log("Список игр:", games);
+    return games;
+  } catch (err) {
+    console.error("Ошибка загрузки списка игр:", err);
+    return [];
+  }
 };
 
 export function game() {
