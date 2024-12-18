@@ -42,6 +42,13 @@ async function replayGame(id) {
 
     alert(`Реплей завершён. Победитель: ${game.winner}`);
   }
-}
+  // Запуск новой игры
+  document.getElementById("newGameButton").addEventListener("click", () => {
+    start_game();
+  });
 
-start_game();
+  // Показ списка сохранённых игр
+  document.getElementById("gameListButton").addEventListener("click", () => {
+    showGameList();
+  });
+}
