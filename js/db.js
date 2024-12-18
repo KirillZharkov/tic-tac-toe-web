@@ -1,33 +1,30 @@
 import { openDB } from "idb";
 
-const DB_NAME = "TicTacToeDB";
-const DB_VERSION = 1;
-const STORE_NAME = "games";
-
-const initDB = async () => {
-  return openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, {
-          keyPath: "id",
-          autoIncrement: true,
-        });
-      }
-    },
-  });
-};
+const dbPromise = openDB("tic-tac-toe-db", 1, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains("games")) {
+      db.createObjectStore("games", { keyPath: "id", autoIncrement: true });
+    }
+  },
+});
 
 export const saveGame = async (gameData) => {
-  const db = await initDB();
-  await db.add(STORE_NAME, gameData);
+  const db = await dbPromise;
+  const tx = db.transaction("games", "readwrite");
+  await tx.objectStore("games").add(gameData);
+  await tx.done;
+  console.log("Игра сохранена:", gameData);
 };
 
-export const getAllGames = async () => {
-  const db = await initDB();
-  return await db.getAll(STORE_NAME);
+export const listGames = async () => {
+  const db = await dbPromise;
+  return await db
+    .transaction("games", "readonly")
+    .objectStore("games")
+    .getAll();
 };
 
-export const getGameById = async (id) => {
-  const db = await initDB();
-  return await db.get(STORE_NAME, id);
+export const loadGame = async (id) => {
+  const db = await dbPromise;
+  return await db.transaction("games", "readonly").objectStore("games").get(id);
 };

@@ -1,34 +1,19 @@
-<html>
-  <meta
-    name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-  />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <head>
-    <title>Tic_Tac_Toe</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <p id="name">Tic-Tac-Toe</p>
-    <div class="content">
-      <div id="area"></div>
-    </div>
-    <p id="win"></p>
-    <p id="reset_p">
-      <input
-        type="button"
-        id="reset"
-        value="Play new"
-        onclick="location.reload();"
-      />
-    </p>
-
-    <div id="game-controls">
-      <button id="save-game">Save Game</button>
-      <button id="list-games">List Games</button>
-      <input id="game-id-input" type="number" placeholder="Enter Game ID" />
-      <button id="load-game">Load Game</button>
-    </div>
-  </body>
-</html>
+<body>
+  <p id="name">Tic-Tac-Toe</p>
+  <div class="content">
+    <div id="area"></div>
+  </div>
+  <p id="win"></p>
+  <p id="reset_p">
+    <input
+      type="button"
+      id="reset"
+      value="Play new"
+      onclick="location.reload();"
+    />
+    <input type="button" id="save" value="Save Game" />
+    <input type="button" id="load" value="List Games" />
+  </p>
+  <ul id="game-list"></ul>
+</body>
 <script src="js/View.js" type="module"></script>
