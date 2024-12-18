@@ -1,4 +1,5 @@
 import { winIn, size, name } from "./Model.js";
+import { saveGame, listGames, loadGame } from "./db.js";
 
 var coor_pc = [];
 var coor_pl = [];
@@ -9,6 +10,31 @@ var pc_player = "o";
 var size1;
 var area = document.getElementById("area");
 var cell = document.getElementsByClassName("cell");
+
+export const saveCurrentGame = (coor_pl, coor_pc, result) => {
+  const gameData = {
+    playerName: name,
+    boardSize: size,
+    playerMoves: coor_pl,
+    pcMoves: coor_pc,
+    result: result,
+  };
+  saveGame(gameData);
+};
+
+export const displayGameList = async () => {
+  const games = await listGames();
+  const listElement = document.getElementById("game-list");
+  listElement.innerHTML = "";
+  games.forEach((game) => {
+    const item = document.createElement("li");
+    item.textContent = `Game ${game.id}: ${game.playerName} (${game.result})`;
+    item.addEventListener("click", () => {
+      loadGame(game.id).then(loadGameState);
+    });
+    listElement.appendChild(item);
+  });
+};
 
 // Функция для загрузки сохранённого состояния игры
 export const loadGameState = (gameData) => {
