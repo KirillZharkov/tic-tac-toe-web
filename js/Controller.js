@@ -121,33 +121,28 @@ export function game() {
     return false;
   }
 
-  // Добавляем обработчики событий после загрузки DOM
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("new-game").addEventListener("click", () => {
-      location.reload();
+  document.getElementById("new-game").addEventListener("click", () => {
+    location.reload();
+  });
+
+  document.getElementById("show-games").addEventListener("click", async () => {
+    const games = await getAllGames();
+    const gameList = document.getElementById("game-list");
+    gameList.innerHTML = "<ul>";
+    games.forEach((game) => {
+      gameList.innerHTML += `<li data-id="${game.id}">Game ID: ${game.id} - ${game.name} - ${game.date}</li>`;
     });
+    gameList.innerHTML += "</ul>";
 
-    document
-      .getElementById("show-games")
-      .addEventListener("click", async () => {
-        const games = await getAllGames();
-        const gameList = document.getElementById("game-list");
-        gameList.innerHTML = "<ul>";
-        games.forEach((game) => {
-          gameList.innerHTML += `<li data-id="${game.id}">Game ID: ${game.id} - ${game.name} - ${game.date}</li>`;
-        });
-        gameList.innerHTML += "</ul>";
-
-        const gameItems = document.querySelectorAll("#game-list li");
-        gameItems.forEach((item) => {
-          item.addEventListener("click", async () => {
-            const gameId = item.getAttribute("data-id");
-            const game = await getGameById(parseInt(gameId));
-            alert(
-              `Game ID: ${game.id}\nPlayer: ${game.name}\nSize: ${game.size}\nDate: ${game.date}`
-            );
-          });
-        });
+    const gameItems = document.querySelectorAll("#game-list li");
+    gameItems.forEach((item) => {
+      item.addEventListener("click", async () => {
+        const gameId = item.getAttribute("data-id");
+        const game = await getGameById(parseInt(gameId));
+        alert(
+          `Game ID: ${game.id}\nPlayer: ${game.name}\nSize: ${game.size}\nDate: ${game.date}`
+        );
       });
+    });
   });
 }
