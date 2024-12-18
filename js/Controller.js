@@ -1,4 +1,5 @@
-import { winIn, size, name } from "./Model.js";
+import { winIn, size, name, saveCurrentGame } from "./Model.js";
+import { getAllGames, getGameById } from "./Database.js";
 
 var coor_pc = [];
 var coor_pl = [];
@@ -57,6 +58,7 @@ export function game() {
     if (checkWin(coor_pc)) {
       document.getElementById("win").innerHTML = "Вы проиграли";
       del_list();
+      saveCurrentGame(coor_pc, coor_pl, size, name);
     } else {
       var draw = true;
       for (var i in cell) {
@@ -65,6 +67,7 @@ export function game() {
       if (draw) {
         document.getElementById("win").innerHTML = "Ничья)";
         del_list();
+        saveCurrentGame(coor_pc, coor_pl, size, name);
       }
     }
   }
@@ -88,6 +91,7 @@ export function game() {
     if (checkWin(coor_pl)) {
       document.getElementById("win").innerHTML = "Победил " + name;
       del_list();
+      saveCurrentGame(coor_pc, coor_pl, size, name);
     } else {
       var draw = true;
       for (var i in cell) {
@@ -96,6 +100,7 @@ export function game() {
       if (draw) {
         document.getElementById("win").innerHTML = "Ничья)";
         del_list();
+        saveCurrentGame(coor_pc, coor_pl, size, name);
       }
     }
     if (checkWin(coor_pl) == false && draw == false) setTimeout(pc_hod, 400);
@@ -115,6 +120,7 @@ export function game() {
     }
     return false;
   }
+
   document.getElementById("new-game").addEventListener("click", () => {
     location.reload();
   });
