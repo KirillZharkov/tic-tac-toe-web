@@ -1,19 +1,30 @@
-<html>
-  <meta
-    name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-  />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<!DOCTYPE html>
+<html lang="ru">
   <head>
-    <title>Tic_Tac_Toe</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <p id="name">Tic-Tac-Toe</p>
+
+    <!-- Кнопка для начала новой игры -->
     <button id="newGameButton">Play new</button>
+
+    <!-- Кнопка для показа списка игр -->
     <button id="gameListButton">Список игр</button>
+
+    <!-- Игровая область -->
     <div id="area"></div>
+
+    <!-- Информация о победителе -->
     <p id="win"></p>
+
+    <!-- Кнопка для перезагрузки -->
     <p id="reset_p">
       <input
         type="button"
@@ -22,8 +33,9 @@
         onclick="location.reload();"
       />
     </p>
-    <button onclick="showGameList()">Список игр</button>
-    <ul id="gameList"></ul>
+
+    <!-- Подключение скриптов -->
+    <script src="js/idb.js"></script>
+    <script src="js/View.js" type="module"></script>
   </body>
 </html>
-<script src="View.js" type="module"></script>

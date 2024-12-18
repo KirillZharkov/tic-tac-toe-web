@@ -1,10 +1,5 @@
-import { saveGame, getAllGames, getGameById } from "./Database.js";
-import { winIn, size, name } from "./Model.js";
-
-var coor_pc = [];
-var coor_pl = [];
-var kletki = [];
-var startTime;
+import { openDB } from "idb";
+import { winIn, size, name } from "js/Model.js";
 
 var coor_pc = [];
 var coor_pl = [];
@@ -15,6 +10,54 @@ var pc_player = "o";
 var size1;
 var area = document.getElementById("area");
 var cell = document.getElementsByClassName("cell");
+
+const dbName = "TicTacToeDB";
+const storeName = "games";
+
+// Открытие базы данных и создание хранилища
+async function initDB() {
+  return await openDB(dbName, 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
+      }
+    },
+  });
+}
+
+// Сохранение игры в базу данных
+export async function saveGame(winner, moves) {
+  const db = await initDB();
+  await db.add(storeName, { winner, moves });
+}
+
+// Получение всех игр
+export async function getAllGames() {
+  const db = await initDB();
+  return await db.getAll(storeName);
+}
+
+// Функция для показа списка игр
+export async function showGameList() {
+  const games = await getAllGames();
+  if (games.length > 0) {
+    let list = "Список сыгранных игр:\n";
+    games.forEach((game, index) => {
+      list += `${index + 1}. Победитель: ${game.winner}, Ходы: ${JSON.stringify(
+        game.moves
+      )}\n`;
+    });
+    alert(list);
+  } else {
+    alert("Нет сохранённых игр.");
+  }
+}
+
+// Логика игры (упрощенная для примера)
+export function game() {
+  // Здесь реализована логика игры, уже существующая в Controller.js
+  console.log("Игра началась!");
+}
 
 export function game() {
   document.getElementById("area").style.width = 52 * parseInt(size);
@@ -63,15 +106,16 @@ export function game() {
     if (checkWin(coor_pc)) {
       document.getElementById("win").innerHTML = "Вы проиграли";
       del_list();
-    } else {
-      var draw = true;
-      for (var i in cell) {
-        if (cell[i].innerHTML == "") draw = false;
-      }
-      if (draw) {
-        document.getElementById("win").innerHTML = "Ничья)";
-        del_list();
-      }
+      saveGame("PC", [...coor_pc]); // Сохраняем игру
+    } else if (checkWin(coor_pl)) {
+      document.getElementById("win").innerHTML = "Победил " + name;
+      del_list();
+      saveGame(name, [...coor_pl]); // Сохраняем игру
+    }
+    if (draw) {
+      document.getElementById("win").innerHTML = "Ничья";
+      del_list();
+      saveGame("Draw", [...coor_pc, ...coor_pl]); // Сохраняем игру
     }
   }
 
