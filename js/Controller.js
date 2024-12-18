@@ -1,5 +1,5 @@
-import { winIn, size, name, saveCurrentGame } from "./Model.js";
-import { getAllGames, getGameById } from "./Database.js";
+import { winIn, size, name } from "./Model.js";
+import { saveGame, getAllGames, getGameById } from "./Database.js";
 
 var coor_pc = [];
 var coor_pl = [];
@@ -10,6 +10,16 @@ var pc_player = "o";
 var size1;
 var area = document.getElementById("area");
 var cell = document.getElementsByClassName("cell");
+
+// В existing коду добавляем:
+function saveCurrentGame(winner) {
+  const moves = [...coor_pl, ...coor_pc];
+  saveGame({
+    boardSize: size,
+    winner: winner || "Draw",
+    moves: moves,
+  });
+}
 
 export function game() {
   document.getElementById("area").style.width = 52 * parseInt(size);
@@ -58,7 +68,6 @@ export function game() {
     if (checkWin(coor_pc)) {
       document.getElementById("win").innerHTML = "Вы проиграли";
       del_list();
-      saveCurrentGame(coor_pc, coor_pl, size, name);
     } else {
       var draw = true;
       for (var i in cell) {
@@ -67,7 +76,6 @@ export function game() {
       if (draw) {
         document.getElementById("win").innerHTML = "Ничья)";
         del_list();
-        saveCurrentGame(coor_pc, coor_pl, size, name);
       }
     }
   }
@@ -88,10 +96,25 @@ export function game() {
         kletki[i] = 0;
       }
     }
+
+    // // Вызов saveCurrentGame после завершения игры:
+    // if (checkWin(coor_pl)) {
+    //     document.getElementById("win").innerHTML = "Победил " + name;
+    //     del_list();
+    //     saveCurrentGame(name);
+    // } else if (checkWin(coor_pc)) {
+    //     document.getElementById("win").innerHTML = "Вы проиграли";
+    //     del_list();
+    //     saveCurrentGame("Computer");
+    // } else if (draw) {
+    //     document.getElementById("win").innerHTML = "Ничья)";
+    //     del_list();
+    //     saveCurrentGame(null);
+    // }
     if (checkWin(coor_pl)) {
       document.getElementById("win").innerHTML = "Победил " + name;
       del_list();
-      saveCurrentGame(coor_pc, coor_pl, size, name);
+      saveCurrentGame(name);
     } else {
       var draw = true;
       for (var i in cell) {
@@ -100,7 +123,7 @@ export function game() {
       if (draw) {
         document.getElementById("win").innerHTML = "Ничья)";
         del_list();
-        saveCurrentGame(coor_pc, coor_pl, size, name);
+        saveCurrentGame(name);
       }
     }
     if (checkWin(coor_pl) == false && draw == false) setTimeout(pc_hod, 400);
@@ -121,33 +144,23 @@ export function game() {
     return false;
   }
 
-  // Добавляем обработчики событий после загрузки DOM
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("new-game").addEventListener("click", () => {
-      location.reload();
+  // Отобразить список игр
+  window.showGames = async function () {
+    const games = await getAllGames();
+    const gameList = document.getElementById("gameList");
+    gameList.innerHTML = "<h3>Сыгранные игры:</h3>";
+    games.forEach((game) => {
+      gameList.innerHTML += `<p>Игра #${game.id} | Размер: ${game.boardSize} | Победитель: ${game.winner} <button onclick="replayGame(${game.id})">Воспроизвести</button></p>`;
     });
+  };
 
-    document
-      .getElementById("show-games")
-      .addEventListener("click", async () => {
-        const games = await getAllGames();
-        const gameList = document.getElementById("game-list");
-        gameList.innerHTML = "<ul>";
-        games.forEach((game) => {
-          gameList.innerHTML += `<li data-id="${game.id}">Game ID: ${game.id} - ${game.name} - ${game.date}</li>`;
-        });
-        gameList.innerHTML += "</ul>";
-
-        const gameItems = document.querySelectorAll("#game-list li");
-        gameItems.forEach((item) => {
-          item.addEventListener("click", async () => {
-            const gameId = item.getAttribute("data-id");
-            const game = await getGameById(parseInt(gameId));
-            alert(
-              `Game ID: ${game.id}\nPlayer: ${game.name}\nSize: ${game.size}\nDate: ${game.date}`
-            );
-          });
-        });
-      });
-  });
+  // Воспроизвести игру
+  window.replayGame = async function (id) {
+    const game = await getGameById(id);
+    if (game) {
+      const replayArea = document.getElementById("replay");
+      replayArea.innerHTML = `<h3>Игра #${game.id}</h3>`;
+      // Здесь можно добавить код для пошагового воспроизведения игры
+    }
+  };
 }

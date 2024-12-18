@@ -14,11 +14,6 @@
       <div id="area"></div>
     </div>
     <p id="win"></p>
-    <div id="db-controls">
-      <button id="new-game">New Game</button>
-      <button id="show-games">Show Games</button>
-    </div>
-    <div id="game-list"></div>
     <p id="reset_p">
       <input
         type="button"
@@ -27,6 +22,12 @@
         onclick="location.reload();"
       />
     </p>
+    <p id="reset_p">
+      <button id="reset" onclick="showGames()">Список игр</button>
+      <button id="reset1" onclick="replayGame()">Воспроизвести игру</button>
+    </p>
+    <div id="gameList"></div>
+    <div id="replay"></div>
   </body>
 </html>
 <script src="js/View.js" type="module"></script>

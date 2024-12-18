@@ -1,39 +1,27 @@
 import { openDB } from "libs/idb";
 
-const DB_NAME = "ticTacToeDB";
-const STORE_NAME = "games";
+export const dbPromise = openDB("ticTacToeDB", 1, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains("games")) {
+      db.createObjectStore("games", { keyPath: "id", autoIncrement: true });
+    }
+  },
+});
 
-async function initDB() {
-  const db = await openDB(DB_NAME, 1, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, {
-          keyPath: "id",
-          autoIncrement: true,
-        });
-      }
-    },
-  });
-  return db;
-}
-
+// Добавить запись об игре
 export async function saveGame(gameData) {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, "readwrite");
-  const store = tx.objectStore(STORE_NAME);
-  await store.add(gameData);
+  const db = await dbPromise;
+  await db.add("games", gameData);
 }
 
+// Получить список всех игр
 export async function getAllGames() {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, "readonly");
-  const store = tx.objectStore(STORE_NAME);
-  return await store.getAll();
+  const db = await dbPromise;
+  return await db.getAll("games");
 }
 
+// Получить игру по ID
 export async function getGameById(id) {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, "readonly");
-  const store = tx.objectStore(STORE_NAME);
-  return await store.get(id);
+  const db = await dbPromise;
+  return await db.get("games", id);
 }

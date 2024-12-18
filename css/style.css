@@ -59,50 +59,20 @@ body {
 #reset_p {
   text-align: center;
 }
-
+#reset1 {
+  height: 50px;
+  width: 140px;
+  font-size: 19px;
+  margin-top: 35px;
+  background-color: lightgoldenrodyellow;
+}
+#reset1:hover {
+  background-color: lightgreen;
+}
 #name {
   text-align: center;
   font-weight: bold;
   font-size: 27px;
   font-family: sans-serif;
   margin-top: 35px;
-}
-/* Добавьте стили для кнопок управления базой данных */
-#db-controls {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#db-controls button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: lightblue;
-  border: none;
-  cursor: pointer;
-}
-
-#db-controls button:hover {
-  background-color: lightgreen;
-}
-
-/* Стили для списка партий */
-#game-list {
-  margin-top: 20px;
-  text-align: center;
-}
-
-#game-list ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-#game-list li {
-  margin: 5px 0;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-#game-list li:hover {
-  text-decoration: underline;
 }
