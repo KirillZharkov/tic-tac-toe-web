@@ -1,4 +1,4 @@
-import { openDB } from "idb";
+import { openDB } from "libs/idb";
 
 const DB_NAME = "ticTacToeDB";
 const STORE_NAME = "games";
