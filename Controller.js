@@ -17,10 +17,11 @@ var area = document.getElementById("area");
 var cell = document.getElementsByClassName("cell");
 
 export function game() {
-  startTime = new Date();
   document.getElementById("area").style.width = 52 * parseInt(size);
+  size1 = parseInt(size) * parseInt(size);
+  console.log(winIn);
 
-  for (var i = 0; i <= size * size - 1; i++) {
+  for (var i = 0; i <= size1 - 1; i++) {
     area.innerHTML += "<div class='cell' id=" + i + "></div>";
     kletki[i] = i + 1;
   }
@@ -35,6 +36,20 @@ export function game() {
     }
   }
 
+  function who_one() {
+    var pc = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+    if (pc === 1) {
+      pc_player = "x";
+      player = "o";
+      pc_hod();
+    } else {
+      pc_player = "o";
+      player = "x";
+    }
+  }
+
+  who_one();
+
   function pc_hod() {
     while (true) {
       var rand = Math.floor(Math.random() * kletki.length);
@@ -44,38 +59,65 @@ export function game() {
     document.getElementById(hod).innerHTML = pc_player;
     coor_pc.push(hod);
     kletki[rand] = 0;
-    checkGameEnd(coor_pc, "Computer");
+
+    if (checkWin(coor_pc)) {
+      document.getElementById("win").innerHTML = "Вы проиграли";
+      del_list();
+    } else {
+      var draw = true;
+      for (var i in cell) {
+        if (cell[i].innerHTML == "") draw = false;
+      }
+      if (draw) {
+        document.getElementById("win").innerHTML = "Ничья)";
+        del_list();
+      }
+    }
   }
 
   function pl_hod() {
+    var data = [];
+
     if (!this.innerHTML) {
       this.innerHTML = player;
       coor_pl.push(parseInt(this.id));
-      checkGameEnd(coor_pl, name);
-      setTimeout(pc_hod, 400);
+    } else {
+      return;
     }
-  }
 
-  function checkGameEnd(coords, winnerName) {
-    if (checkWin(coords)) {
-      const endTime = new Date();
-      const gameData = {
-        winner: winnerName,
-        moves: { player: coor_pl, computer: coor_pc },
-        startTime: startTime,
-        endTime: endTime,
-      };
-      saveGame(gameData);
-      document.getElementById("win").innerHTML = `Победитель: ${winnerName}`;
-      del_list();
+    for (var i in cell) {
+      if (cell[i].innerHTML == player) {
+        data.push(parseInt(cell[i].getAttribute("id")));
+        kletki[i] = 0;
+      }
     }
+    if (checkWin(coor_pl)) {
+      document.getElementById("win").innerHTML = "Победил " + name;
+      del_list();
+    } else {
+      var draw = true;
+      for (var i in cell) {
+        if (cell[i].innerHTML == "") draw = false;
+      }
+      if (draw) {
+        document.getElementById("win").innerHTML = "Ничья)";
+        del_list();
+      }
+    }
+    if (checkWin(coor_pl) == false && draw == false) setTimeout(pc_hod, 400);
   }
 
   function checkWin(data) {
     for (var i in winIn) {
-      if (winIn[i].every((id) => data.includes(id))) {
-        return true;
+      var win = true;
+      for (var j in winIn[i]) {
+        var id = winIn[i][j];
+        var ind = data.includes(id);
+        if (ind == false) {
+          win = false;
+        }
       }
+      if (win) return true;
     }
     return false;
   }
